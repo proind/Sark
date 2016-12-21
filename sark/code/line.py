@@ -335,7 +335,7 @@ class LinesWrapper(DataWrapper):
 
         if not reverse:
             item = idaapi.get_item_head(start)
-            while item < end:
+            while item <= end:
                 yield Line(item)
                 item += idaapi.get_item_size(item)
 
