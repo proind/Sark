@@ -315,6 +315,12 @@ class Line(object):
 class LinesWrapper(object):
 
     def __getitem__(self, slice_index):
+        """
+        syntethic sugar to allow get a list of Lines by slicing ,
+        as you would with a list
+        :param slice_index: either a slice or an int
+        :return: list of Lines
+        """
         if isinstance(slice_index,slice):
             return list(self.lines(slice_index.start,slice_index.stop))
         elif isinstance(slice_index,int):
@@ -357,33 +363,3 @@ class LinesWrapper(object):
                 item = idaapi.get_item_head(item - 1)
 
 lines = LinesWrapper()
-
-# def lines(start=None, end=None, reverse=False, selection=False):
-#     """Iterate lines in range.
-#
-#     Args:
-#         start: Starting address, start of IDB if `None`.
-#         end: End address, end of IDB if `None`.
-#         reverse: Set to true to iterate in reverse order.
-#         selection: If set to True, replaces start and end with current selection.
-#
-#     Returns:
-#         iterator of `Line` objects.
-#     """
-#     if selection:
-#         start, end = get_selection()
-#
-#     else:
-#         start, end = fix_addresses(start, end)
-#
-#     if not reverse:
-#         item = idaapi.get_item_head(start)
-#         while item < end:
-#             yield Line(item)
-#             item += idaapi.get_item_size(item)
-#
-#     else:  # if reverse:
-#         item = idaapi.get_item_head(end - 1)
-#         while item >= start:
-#             yield Line(item)
-#             item = idaapi.get_item_head(item - 1)
