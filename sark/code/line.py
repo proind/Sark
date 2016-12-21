@@ -316,11 +316,14 @@ class LinesWrapper(object):
 
     def __getitem__(self, slice_index):
         if isinstance(slice_index,slice):
-            return self.lines(slice_index.start,slice_index.stop)
+            return list(self.lines(slice_index.start,slice_index.stop))
+        elif isinstance(slice_index,int):
+            return list(self.lines(slice_index,slice_index))
+        else:
+            raise TypeError("Bad input - use only ints or slices")
 
     def __call__(self,*args, **kwargs):
         return self.lines(*args, **kwargs)
-
 
     @staticmethod
     def lines(start=None, end=None, reverse=False, selection=False):
