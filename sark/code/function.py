@@ -288,18 +288,38 @@ def iter_function_lines(func_ea):
     for line in idautils.FuncItems(get_ea(func_ea)):
         yield Line(line)
 
+class FunctionsWrapper(object):
+    def __getitem__(self, slice_index):
+        """
+        syntethic sugar to allow getting a list of Lines by slicing ,
+        as you would with a list
+        :param slice_index: either a slice or an int
+        :return: list of Lines
+        """
+        if isinstance(slice_index, slice):
+            return list(self.generator(slice_index.start, slice_index.stop))
+        elif isinstance(slice_index, int):
+            return list(self.generator(slice_index, slice_index))
+        else:
+            raise TypeError("Bad input - use only ints or slices")
 
-def functions(start=None, end=None):
-    """Get all functions in range.
+    def __call__(self, *args, **kwargs):
+        return self.generator(*args, **kwargs)
 
-    Args:
-        start: Start address of the range. Defaults to IDB start.
-        end: End address of the range. Defaults to IDB end.
+    @staticmethod
+    def generator(start=None, end=None):
+        """Get all functions in range.
 
-    Returns:
-        This is a generator that iterates over all the functions in the IDB.
-    """
-    start, end = fix_addresses(start, end)
+        Args:
+            start: Start address of the range. Defaults to IDB start.
+            end: End address of the range. Defaults to IDB end.
 
-    for func_t in idautils.Functions(start, end):
-        yield Function(func_t)
+        Returns:
+            This is a generator that iterates over all the functions in the IDB.
+        """
+        start, end = fix_addresses(start, end)
+
+        for func_t in idautils.Functions(start, end):
+            yield Function(func_t)
+
+functions = FunctionsWrapper()
