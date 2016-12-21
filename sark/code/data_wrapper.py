@@ -1,4 +1,4 @@
-class DataWrapper(object):
+class CollectionsWrapper(object):
     def __getitem__(self, slice_index):
         """
         syntethic sugar to allow getting a list of Lines by slicing ,
@@ -18,4 +18,4 @@ class DataWrapper(object):
 
     @staticmethod
     def generator(start=None, end=None):
-        raise NotImplementedError("Inherit DataWrapper and implement this function")
+        raise NotImplementedError("Inherit CollectionsWrapper and implement this function")

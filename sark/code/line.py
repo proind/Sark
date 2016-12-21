@@ -8,7 +8,7 @@ from .instruction import Instruction
 from ..ui import updates_ui
 from .base import get_selection, get_offset_name, demangle
 from .. import data
-from data_wrapper import DataWrapper
+from data_wrapper import CollectionsWrapper
 
 class Comments(object):
     """IDA Line Comments
@@ -313,7 +313,7 @@ class Line(object):
         return not self.__eq__(other)
 
 
-class LinesWrapper(DataWrapper):
+class LinesWrapper(CollectionsWrapper):
     @staticmethod
     def generator(start=None, end=None, reverse=False, selection=False):
         """Iterate lines in range.

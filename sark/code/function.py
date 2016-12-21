@@ -8,7 +8,7 @@ from .line import Line
 from .xref import Xref
 from ..ui import updates_ui
 from .. import exceptions
-from data_wrapper import DataWrapper
+from data_wrapper import CollectionsWrapper
 
 class Comments(object):
     """IDA Function Comments
@@ -289,7 +289,7 @@ def iter_function_lines(func_ea):
         yield Line(line)
 
 
-class FunctionsWrapper(DataWrapper):
+class FunctionsWrapper(CollectionsWrapper):
     @staticmethod
     def generator(start=None, end=None):
         """Get all functions in range.
