@@ -8,7 +8,7 @@ from .line import Line
 from .xref import Xref
 from ..ui import updates_ui
 from .. import exceptions
-
+from data_wrapper import DataWrapper
 
 class Comments(object):
     """IDA Function Comments
@@ -288,24 +288,8 @@ def iter_function_lines(func_ea):
     for line in idautils.FuncItems(get_ea(func_ea)):
         yield Line(line)
 
-class FunctionsWrapper(object):
-    def __getitem__(self, slice_index):
-        """
-        syntethic sugar to allow getting a list of Lines by slicing ,
-        as you would with a list
-        :param slice_index: either a slice or an int
-        :return: list of Lines
-        """
-        if isinstance(slice_index, slice):
-            return list(self.generator(slice_index.start, slice_index.stop))
-        elif isinstance(slice_index, int):
-            return list(self.generator(slice_index, slice_index))
-        else:
-            raise TypeError("Bad input - use only ints or slices")
 
-    def __call__(self, *args, **kwargs):
-        return self.generator(*args, **kwargs)
-
+class FunctionsWrapper(DataWrapper):
     @staticmethod
     def generator(start=None, end=None):
         """Get all functions in range.

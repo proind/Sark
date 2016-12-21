@@ -8,7 +8,7 @@ from .instruction import Instruction
 from ..ui import updates_ui
 from .base import get_selection, get_offset_name, demangle
 from .. import data
-
+from data_wrapper import DataWrapper
 
 class Comments(object):
     """IDA Line Comments
@@ -312,25 +312,8 @@ class Line(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-class LinesWrapper(object):
 
-    def __getitem__(self, slice_index):
-        """
-        syntethic sugar to allow getting a list of Lines by slicing ,
-        as you would with a list
-        :param slice_index: either a slice or an int
-        :return: list of Lines
-        """
-        if isinstance(slice_index,slice):
-            return list(self.lines(slice_index.start,slice_index.stop))
-        elif isinstance(slice_index,int):
-            return list(self.lines(slice_index,slice_index))
-        else:
-            raise TypeError("Bad input - use only ints or slices")
-
-    def __call__(self,*args, **kwargs):
-        return self.lines(*args, **kwargs)
-
+class LinesWrapper(DataWrapper):
     @staticmethod
     def lines(start=None, end=None, reverse=False, selection=False):
         """Iterate lines in range.
@@ -363,3 +346,4 @@ class LinesWrapper(object):
                 item = idaapi.get_item_head(item - 1)
 
 lines = LinesWrapper()
+
