@@ -315,7 +315,7 @@ class Line(object):
 
 class LinesWrapper(DataWrapper):
     @staticmethod
-    def lines(start=None, end=None, reverse=False, selection=False):
+    def generator(start=None, end=None, reverse=False, selection=False):
         """Iterate lines in range.
 
         Args:
