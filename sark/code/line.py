@@ -8,7 +8,7 @@ from .instruction import Instruction
 from ..ui import updates_ui
 from .base import get_selection, get_offset_name, demangle
 from .. import data
-from data_wrapper import CollectionsWrapper
+from collections_wrapper import CollectionsWrapper
 
 class Comments(object):
     """IDA Line Comments

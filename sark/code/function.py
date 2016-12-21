@@ -8,7 +8,7 @@ from .line import Line
 from .xref import Xref
 from ..ui import updates_ui
 from .. import exceptions
-from data_wrapper import CollectionsWrapper
+from collections_wrapper import CollectionsWrapper
 
 class Comments(object):
     """IDA Function Comments
