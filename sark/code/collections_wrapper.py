@@ -1,7 +1,7 @@
 class CollectionsWrapper(object):
     def __getitem__(self, slice_index):
         """
-        syntethic sugar to allow getting a list of Lines by slicing ,
+        syntethic sugar to allow getting a list of Lines  or Functions by slicing ,
         as you would with a list
         :param slice_index: either a slice or an int
         :return: list of Lines
