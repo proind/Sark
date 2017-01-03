@@ -9,7 +9,7 @@ from .instruction import Instruction
 from ..ui import updates_ui
 from .base import get_selection, get_offset_name, demangle
 from .. import data
-
+from collections_wrapper import CollectionsWrapper
 
 class Comments(object):
     """IDA Line Comments
@@ -340,32 +340,37 @@ class Line(object):
         return not self.__eq__(other)
 
 
-def lines(start=None, end=None, reverse=False, selection=False):
-    """Iterate lines in range.
+class LinesWrapper(CollectionsWrapper):
+    @staticmethod
+    def generator(start=None, end=None, reverse=False, selection=False):
+        """Iterate lines in range.
 
-    Args:
-        start: Starting address, start of IDB if `None`.
-        end: End address, end of IDB if `None`.
-        reverse: Set to true to iterate in reverse order.
-        selection: If set to True, replaces start and end with current selection.
+        Args:
+            start: Starting address, start of IDB if `None`.
+            end: End address, end of IDB if `None`.
+            reverse: Set to true to iterate in reverse order.
+            selection: If set to True, replaces start and end with current selection.
 
-    Returns:
-        iterator of `Line` objects.
-    """
-    if selection:
-        start, end = get_selection()
+        Returns:
+            iterator of `Line` objects.
+        """
+        if selection:
+            start, end = get_selection()
 
-    else:
-        start, end = fix_addresses(start, end)
+        else:
+            start, end = fix_addresses(start, end)
 
-    if not reverse:
-        item = idaapi.get_item_head(start)
-        while item < end:
-            yield Line(item)
-            item += idaapi.get_item_size(item)
+        if not reverse:
+            item = idaapi.get_item_head(start)
+            while item <= end:
+                yield Line(item)
+                item += idaapi.get_item_size(item)
 
-    else:  # if reverse:
-        item = idaapi.get_item_head(end - 1)
-        while item >= start:
-            yield Line(item)
-            item = idaapi.get_item_head(item - 1)
+        else:  # if reverse:
+            item = idaapi.get_item_head(end - 1)
+            while item >= start:
+                yield Line(item)
+                item = idaapi.get_item_head(item - 1)
+
+lines = LinesWrapper()
+
