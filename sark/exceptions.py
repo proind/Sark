@@ -1,8 +1,4 @@
-class SarkException(Exception):
-    pass
-
-
-class SarkError(SarkException):
+class SarkError(Exception):
     pass
 
 
