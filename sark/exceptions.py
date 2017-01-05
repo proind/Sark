@@ -199,6 +199,8 @@ class NoMoreSegments(SegmentError):
 class InvalidBitness(SegmentError):
     pass
 
+class CantMoveSegment(SegmentError):
+    pass
 
 class NoFileOffset(SarkError):
     pass

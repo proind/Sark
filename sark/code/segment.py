@@ -92,6 +92,18 @@ class Segment(object):
         64: 2,
     }
 
+    MOVE_ERRORS = {idaapi.MOVE_SEGM_PARAM: "The specified segment does not exist",
+                   idaapi.MOVE_SEGM_ROOM: "Not enough free room at the target address",
+                   idaapi.MOVE_SEGM_IDP: "IDP module forbids moving the segment",
+                   idaapi.MOVE_SEGM_CHUNK: "Too many chunks are defined, can't move",
+                   idaapi.MOVE_SEGM_LOADER: "The segment has been moved but the loader complained",
+                   idaapi.MOVE_SEGM_ODD: "Can not move segments by an odd number of bytes",
+                   idaapi.MOVE_SEGM_ORPHAN: "Orphan bytes hinder segment movement"}
+
+
+
+
+
     class UseCurrentAddress(object):
         pass
 
@@ -234,6 +246,17 @@ class Segment(object):
     @property
     def size(self):
         return self.endEA - self.startEA
+
+    def move(self, new_addr, flag=idaapi.MSF_SILENT):
+        """ Move the segment to a new location
+            Documentation for flags and error codes:
+            https://www.hex-rays.com/products/ida/support/idadoc/1525.shtml
+        """
+        result = idc.MoveSegm(self.startEA,new_addr,flag)
+        if result!=idaapi.MOVE_SEGM_OK:
+            error_text = self.MOVE_ERRORS.get(result,"Unknown Error")
+            raise exceptions.CantMoveSegment(error_text)
+
 
     def __repr__(self):
         return ("<Segment(ea=0x{:08X},"
